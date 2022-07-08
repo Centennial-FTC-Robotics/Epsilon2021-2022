@@ -23,25 +23,23 @@ public class RedCarousel extends LinearOpMode {
         waitForStart();
 
         //drive to ASH
-        OurRobot.drivetrain.Move(0.5, 30, Drivetrain.MoveType.STRAFE, this);
-        //align against wall???
+        OurRobot.drivetrain.Move(0.5, 25, Drivetrain.MoveType.STRAFE, this);
         OurRobot.drivetrain.Move(0.5, -16, Drivetrain.MoveType.DRIVE, this);
 
         //score
         OurRobot.outtake.scoreASH(scorePos);
-        OurRobot.outtake.upMotor.setPower(0);
 
         //OurRobot.CycleFreight(this);
 
-        OurRobot.drivetrain.Move(0.5, 7, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.5, 12, Drivetrain.MoveType.DRIVE, this);
 
         //drive back, go to carousel
         //OurRobot.imu.gyroTurn(0.8, 90, this);
-        OurRobot.drivetrain.Move(0.5, -18, Drivetrain.MoveType.TURN, this);
-        OurRobot.drivetrain.Move(0.5, 46, Drivetrain.MoveType.DRIVE, this);
-        OurRobot.carousel.duckMotor.setPower(0.5);
+        OurRobot.drivetrain.Move(0.5, -17, Drivetrain.MoveType.TURN, this);
+        OurRobot.drivetrain.Move(0.35, 45, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.carousel.duckMotor.setPower(-0.5);
         OurRobot.wait(5000, this);
         OurRobot.carousel.duckMotor.setPower(0.0);
-        OurRobot.drivetrain.Move(0.5, -20, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.5, -25, Drivetrain.MoveType.STRAFE, this);
     }
 }

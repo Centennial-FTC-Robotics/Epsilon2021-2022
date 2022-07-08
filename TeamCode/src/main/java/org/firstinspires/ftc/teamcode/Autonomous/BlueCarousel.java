@@ -18,7 +18,7 @@ public class BlueCarousel extends LinearOpMode {
         OurRobot.initialize(this);
         OurRobot.outtake.upMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         OurRobot.outtake.upMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Outtake.PosASH scorePos = Outtake.PosASH.TOP;
+        Outtake.PosASH scorePos = OpenCV.Pipeline.getAnalysis();
         //scan
         while (!isStarted()) {
             scorePos = OpenCV.Pipeline.getAnalysis();

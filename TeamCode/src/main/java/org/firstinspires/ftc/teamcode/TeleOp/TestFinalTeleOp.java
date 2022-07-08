@@ -108,7 +108,7 @@ public class TestFinalTeleOp extends LinearOpMode {
 
                     //dpad control of the horizontal servo
                     if (gamepad2.dpad_left) {
-                        OurRobot.outtake.arm.setPosition(0.6);
+                        OurRobot.outtake.arm.setPosition(0.9);
                     } else if (gamepad2.dpad_right) {
                         OurRobot.outtake.arm.setPosition(0);
                     }

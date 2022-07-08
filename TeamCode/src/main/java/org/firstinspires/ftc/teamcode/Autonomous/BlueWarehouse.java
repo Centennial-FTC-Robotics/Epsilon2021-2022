@@ -20,23 +20,28 @@ public class BlueWarehouse extends LinearOpMode {
 
         waitForStart();
 
-        noCycle();
+        noCycle(scorePos);
+        //Cycle();
         //cycle();
 
     }
 
-    public void noCycle(){
+    public void Cycle(){
         //drive to ASH
         OurRobot.drivetrain.Move(0.5, 25, Drivetrain.MoveType.STRAFE, this);
-        OurRobot.drivetrain.Move(0.5, -16, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.5, -19, Drivetrain.MoveType.DRIVE, this);
 
         //score
         OurRobot.outtake.scoreASH(Outtake.PosASH.TOP);
 
         //drive back and turn
-        OurRobot.drivetrain.Move(0.5, 14, Drivetrain.MoveType.DRIVE, this);
-        OurRobot.drivetrain.Move(0.5, 18, Drivetrain.MoveType.TURN, this);
-        OurRobot.drivetrain.Move(0.5, 5, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.5, 16, Drivetrain.MoveType.DRIVE, this);
+
+        OurRobot.drivetrain.Move(0.3, -18, Drivetrain.MoveType.TURN, this);
+        OurRobot.drivetrain.Move(0.3, -18, Drivetrain.MoveType.TURN, this);
+        OurRobot.drivetrain.Move(0.3, -18, Drivetrain.MoveType.TURN, this);
+
+        OurRobot.drivetrain.Move(0.5, -10, Drivetrain.MoveType.STRAFE, this);
 
         OurRobot.CycleFreight(this);
         OurRobot.CycleFreight(this);
@@ -46,18 +51,18 @@ public class BlueWarehouse extends LinearOpMode {
 
     public void noCycle(Outtake.PosASH scorePos){
         //drive to ASH
-        OurRobot.drivetrain.Move(0.5, -29, Drivetrain.MoveType.STRAFE, this);
-        OurRobot.drivetrain.Move(0.5, -18, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.5, 25, Drivetrain.MoveType.STRAFE, this);
+        OurRobot.drivetrain.Move(0.5, -19, Drivetrain.MoveType.DRIVE, this);
 
         //score ASH
         OurRobot.outtake.scoreASH(scorePos);
 
         //Move back and turn
-        OurRobot.drivetrain.Move(0.5, 9, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.5, 5, Drivetrain.MoveType.DRIVE, this);
         OurRobot.drivetrain.Move(0.3, 18, Drivetrain.MoveType.TURN, this);
 
         //Drive into warehouse
-        OurRobot.drivetrain.Move(0.5,-55, Drivetrain.MoveType.DRIVE, this);
+        OurRobot.drivetrain.Move(0.7,-70, Drivetrain.MoveType.DRIVE, this);
     }
 
     public void cycle(){
