@@ -18,7 +18,7 @@ public class TestTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-           double y = -gamepad1.left_stick_y;
+           /*double y = -gamepad1.left_stick_y;
            double x = gamepad1.left_stick_x;
            double r = gamepad1.right_stick_x;
 
@@ -26,6 +26,10 @@ public class TestTeleOp extends LinearOpMode {
            robot.drivetrain.frontRight.setPower(y-r-x);
            robot.drivetrain.backLeft.setPower(y+r-x);
            robot.drivetrain.backRight.setPower(y-r+x);
+           */
+
+           // OurRobot.imu.getError();
+
 
            //OurRobot.Odometry.update();
            //telemetry.addData("XPosition", OurRobot.Odometry.xPos);

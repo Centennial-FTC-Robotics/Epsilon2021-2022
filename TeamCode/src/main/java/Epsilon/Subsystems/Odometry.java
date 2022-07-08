@@ -32,33 +32,25 @@ public class Odometry implements Subsystem {
     LinearOpMode opMode;
 
     public void initialize(LinearOpMode opMode) {
-        encoderX = OurRobot.drivetrain.backLeft; //opMode.hardwareMap.get(DcMotor.class, "frontLeft");
-        encoderY = OurRobot.drivetrain.frontLeft; //.hardwareMap.get(DcMotor.class, "backLeft");
+        encoderX = OurRobot.drivetrain.frontLeft; //opMode.hardwareMap.get(DcMotor.class, "frontLeft");
+        encoderY = OurRobot.drivetrain.backLeft; //.hardwareMap.get(DcMotor.class, "backLeft");
 
         encoderX.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderY.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        encoderX.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        encoderY.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        encoderX.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        encoderY.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         lastEncoderYPos = encoderY.getCurrentPosition();
         lastEncoderXPos = encoderX.getCurrentPosition();
-        xPos = 0;
-        yPos = 0;
     }
 
     public double encoderToInch(double ticks){
-        //Inches to Encoder Counts Stuff
-        //Diameter: 1.96 in
-        //8192 ticks per rev
-        //(8192 ticks / 1 rev) * (1 rev / 1.96pi in)
-        double COUNTS_PER_INCH = 8192/(Math.PI*1.96);
-        double inches = ticks/COUNTS_PER_INCH;
+        double inches = ticks*(Math.PI/4096);
         return inches;
     }
 
     public void update(){
-        //imu.update();
         //Find change in encoder position
         double YEncoderChange = encoderY.getCurrentPosition() - lastEncoderYPos;
         double XEncoderChange = encoderX.getCurrentPosition()- lastEncoderXPos;
@@ -75,8 +67,8 @@ public class Odometry implements Subsystem {
         YChange = YEncoderChange * Math.cos(heading) + XEncoderChange * Math.sin(heading);
         XChange = YEncoderChange * Math.sin(heading) + XEncoderChange * Math.cos(heading);
 
-        xPos = encoderToInch(encoderX.getCurrentPosition());
-        yPos = encoderToInch(encoderY.getCurrentPosition());
+        xPos += encoderToInch(XChange);
+        yPos += encoderToInch(YChange);
 
         //update old angle
         lastAngle = imu.angle();

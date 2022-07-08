@@ -16,20 +16,19 @@ public class Drivetrain implements Subsystem {
 
     Odometry odo;
 
+
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor backRight;
 
     //PID constants - will be tuned to different values
-    private double kP = 0.00008;
-    private double minorkP = 0.00025;
+    private double kP = 0.1;
     private double kI = 0.1;
     private double kD = 0.1;
-    private double thres = 300;
 
     public void initialize(LinearOpMode opMode) {
-        //odo = OurRobot.Odometry;
+        odo = OurRobot.Odometry;
 
         frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
         frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
@@ -86,8 +85,8 @@ public class Drivetrain implements Subsystem {
 
     public double INtoEC(double inches) {
         //Inches to Encoder Counts Stuff
-        //(8192 ticks / 1 rev) * (1 rev / 1.96pi )
-        double COUNTS_PER_INCH = 8192/(Math.PI*1.96);
+        //(537 ticks / 1 rev) * (1 rev / 96pi mm) * (1 mm / x in)
+        double COUNTS_PER_INCH = 45.2;
         double EncoderCounts = inches * COUNTS_PER_INCH;
         return EncoderCounts;
     }
@@ -127,26 +126,24 @@ public class Drivetrain implements Subsystem {
     }
 
     //Basic PID method for linear/lateral movement
-    public void Move(double inchesX, double inchesY, LinearOpMode opMode) {
+    public void Move(double inchesX, double inchesY) {
 
-        OurRobot.Odometry.update();
-        double currentPosX = INtoEC(OurRobot.Odometry.xPos);
-        double currentPosY = INtoEC(OurRobot.Odometry.yPos);
-        double targetX = INtoEC(inchesX) + currentPosX;
-        double targetY = INtoEC(inchesY) + currentPosY;
+        double targetX = INtoEC(inchesX);
+        double targetY = INtoEC(inchesY);
+        double currentPosX = odo.encoderX.getCurrentPosition();
+        double currentPosY = odo.encoderY.getCurrentPosition();
         double lastErrorX = 0;
         double lastErrorY = 0;
         double integralSumX = 0;
         double integralSumY = 0;
-        double powerX = 0, powerY = 0;
+
         ElapsedTime timer = new ElapsedTime();
-        while (!(targetX - currentPosX < thres && targetX - currentPosX > -thres
-                && targetY - currentPosY < thres && targetY - currentPosY > -thres)) {
+        while (targetX - currentPosX > 0 || targetY - currentPosY > 0) {
 
-            OurRobot.Odometry.update();
+            odo.update();
 
-            currentPosX = INtoEC(OurRobot.Odometry.xPos);
-            currentPosY = INtoEC(OurRobot.Odometry.yPos);
+            currentPosX = odo.xPos;
+            currentPosY = odo.yPos;
 
             //calculate the error
             double errorX = targetX - currentPosX;
@@ -160,32 +157,18 @@ public class Drivetrain implements Subsystem {
             integralSumX = integralSumX + (errorX * timer.seconds());
             integralSumY = integralSumY + (errorY * timer.seconds());
 
-            if (inchesX > inchesY) {
-                powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
-                powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
-            } else if (inchesX < inchesY) {
-                powerX = (kP * errorX);// + (kI * integralSumX) + (kD * derivativeX);
-                powerY = (kP * errorY);// + (kI * integralSumY) + (kD * derivativeY);
-            }
+            double powerX = (kP * errorX) + (kI * integralSumX) + (kD * derivativeX);
+            double powerY = (kP * errorY) + (kI * integralSumY) + (kD * derivativeY);
 
-            if (powerX < 0.1 && powerX > 0) {
-                powerX = 0.1 * (errorX / Math.abs(errorX)); // determine pos or neg
-            }
-            if (powerY < 0.1 && powerY > 0) {
-                powerY = 0.1 * (errorY / Math.abs(errorY));
-            }
             //Power(power, Type);
 
-            frontLeft.setPower(powerY - powerX);
-            backLeft.setPower(powerY + powerX);
-            frontRight.setPower(powerY + powerX);
-            backRight.setPower(powerY - powerX);
+            frontLeft.setPower(powerY + powerX);
+            backLeft.setPower(powerY - powerX);
+            frontRight.setPower(powerY - powerX);
+            backRight.setPower(powerY + powerX);
 
             lastErrorX = errorX;
             lastErrorY = errorY;
-            opMode.telemetry.addData("Target - Current (X)", targetX - currentPosX);
-            opMode.telemetry.addData("Target - Current (Y)", targetY - currentPosY);
-            opMode.telemetry.update();
             timer.reset();
         }
     }

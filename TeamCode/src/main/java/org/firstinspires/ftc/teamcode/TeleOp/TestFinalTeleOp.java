@@ -23,7 +23,6 @@ public class TestFinalTeleOp extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException{
-
         //OurRobot robot = new OurRobot();    //creates instance of "OurRobot," giving it access to hardware/methods
         OurRobot.initialize(this);
         OurRobot.drivetrain.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -55,18 +54,20 @@ public class TestFinalTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
 
+            telemetry.addData("X", OurRobot.Odometry.encoderX.getCurrentPosition());
+            telemetry.addData("Y", OurRobot.Odometry.encoderY.getCurrentPosition());
             /*****************
              * Drive Formula *
              ****************/
             double y = -gamepad1.left_stick_y;
             double x = -gamepad1.left_stick_x;
             double r = -gamepad1.right_stick_x;
-
+            /*
             OurRobot.drivetrain.frontLeft.setPower(speed*(y-r-x));
             OurRobot.drivetrain.frontRight.setPower(speed*(y+r+x));
             OurRobot.drivetrain.backLeft.setPower(speed*(y-r+x));
             OurRobot.drivetrain.backRight.setPower(speed*(y+r-x));
-
+            */
             if (gamepad1.right_trigger>0)           //slowmode
                 speed = 0.3;
             else if (gamepad1.left_trigger>0)       //fastmode
@@ -179,8 +180,8 @@ public class TestFinalTeleOp extends LinearOpMode {
                 default:
                     outtakeState = OuttakeState.OUTTAKE_INIT;
             }
-            telemetry.addData("level",level);
-            telemetry.addData("outtake fsm",outtakeState);
+            //elemetry.addData("level",level);
+            //telemetry.addData("outtake fsm",outtakeState);
 
             /*******************
              * Door and Toggle *
@@ -238,9 +239,9 @@ public class TestFinalTeleOp extends LinearOpMode {
 
 
 
-            telemetry.addData("Door Toggle", doorToggle);
-            telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());
-            telemetry.addData("Vertical",OurRobot.outtake.upMotor.getCurrentPosition());
+            //telemetry.addData("Door Toggle", doorToggle);
+            //telemetry.addData("Horizontal",OurRobot.outtake.arm.getPosition());
+            //telemetry.addData("Vertical",OurRobot.outtake.upMotor.getCurrentPosition());
             telemetry.update();
 
 
